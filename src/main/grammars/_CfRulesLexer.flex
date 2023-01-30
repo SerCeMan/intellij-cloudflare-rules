@@ -27,7 +27,7 @@ WHITE_SPACE=\s+
 
 SPACE=[ \t\n\x0B\f\r]+
 COMMENT=#.*
-STRINGLITERAL=(\"([^\"\r\n\\]|\\.)*\")
+STRINGLITERAL=\"([^\"\\]|\\.)*\"
 NUMBERLITERAL=[0-9]+(\.[0-9]*)?
 IDENTIFIER=[a-zA-Z_][a-zA-Z_$0-9]*
 IPV4CIDR=([0-9]{1,3}\.){3}[0-9]{1,3}("/"([0-9]|[1-2][0-9]|3[0-2]))?
