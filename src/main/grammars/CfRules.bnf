@@ -1,0 +1,136 @@
+{
+  psiClassPrefix="CfRules"
+  parserClass='me.serce.cfrules.lang.parser.CfRulesParser'
+  psiPackage='me.serce.cfrules.lang.psi'
+  psiImplPackage='me.serce.cfrules.lang.psi.impl'
+  implements='me.serce.cfrules.lang.psi.CfRulesElement'
+
+  elementTypeHolderClass='me.serce.cfrules.lang.psi.CfRulesElementTypes'
+  elementTypeClass="me.serce.cfrules.lang.CfRulesElementType"
+  tokenTypeClass="me.serce.cfrules.lang.CfRulesElementType"
+  tokens=[
+    NOT_EN='not'
+    NOT_C='!'
+    AND_EN='and'
+    AND_C='&&'
+    XOR_EN='xor'
+    XOR_C='^^'
+    OR_EN='or'
+    OR_C='||'
+
+    DOT='.'
+    EQ_EN='eq'
+    EQ_C='=='
+    NE_EN='ne'
+    NE_C='!='
+    LT_EN='lt'
+    LT_C='<'
+    LE_EN='le'
+    LE_C='<='
+    GT_EN='gt'
+    GT_C='>'
+    GE_EN='ge'
+    GE_C='>='
+    IN_EN='in'
+
+    MATCHES_EN='matches'
+    MATCHES_C='~'
+    CONTAINS_EN='contains'
+
+    // DOT='.'
+    LPAREN='('
+    RPAREN=')'
+    LBRACE='{'
+    RBRACE='}'
+    LBRACKET='['
+    RBRACKET=']'
+
+    COMMA=','
+    SPACE='regexp:\s+'
+    COMMENT='regexp:#.*'
+
+    stringLiteral='regexp:("([^"\r\n\\]|\\.)*")'
+    numberLiteral='regexp:\d+(\.\d*)?'
+    identifier='regexp:[a-zA-Z_][a-zA-Z_$0-9]*'
+    ipv4Cidr='regexp:([0-9]{1,3}\.){3}[0-9]{1,3}(/([0-9]|[1-2][0-9]|3[0-2]))?'
+    listLiteral='regexp:\$[a-zA-Z_][a-zA-Z_$0-9|.]*'
+  ]
+  extends(".*Expression")=Expression
+}
+
+SourceUnit ::= Expression
+
+// Expressions
+
+Expression ::=
+    // Comparison expressions
+    EqExpression
+    | NeExpression
+    | LtExpression
+    | LteExpression
+    | GtExpression
+    | GteExpression
+    | ContainsExpression
+    | MatchesExpression
+    | InExpression
+    // Logical expressions
+    | ParenExpression
+    | NotExpression
+    | AndExpression
+    | XorExpression
+    | OrExpression
+    // Primitive expressions
+    | ArrayAccessExpression
+    | FunctionExpression
+    | StandardFieldExpression
+
+
+ParenExpression ::= '(' Expression ')' {pin=3}
+NotExpression ::= ('not' | '!') Expression {pin=1}
+AndExpression ::= Expression ('and' | '&&') Expression {pin=2}
+XorExpression ::= Expression ('xor' | '^^') Expression {pin=2}
+OrExpression ::= Expression ('or' | '||') Expression {pin=2}
+
+private PrimitiveExpression ::=
+    ParenExpression
+    | ArrayAccessExpression
+    | FunctionExpression
+    | StandardFieldExpression
+
+EqExpression ::= PrimitiveExpression ('eq' | '==') Value {pin=2}
+NeExpression ::= PrimitiveExpression ('ne' | '!=') Value {pin=2}
+LtExpression ::= PrimitiveExpression ('lt' | '<') Value {pin=2}
+LteExpression ::= PrimitiveExpression ('le' | '<=') Value {pin=2}
+GtExpression ::= PrimitiveExpression ('gt' | '>') Value {pin=2}
+GteExpression ::= PrimitiveExpression ('ge' | '>=') Value {pin=2}
+
+ContainsExpression ::= PrimitiveExpression 'contains' StringLiteral {pin=2}
+MatchesExpression ::= PrimitiveExpression ('matches' | '~') StringLiteral {pin=2}
+InExpression ::= PrimitiveExpression 'in' (SetValue | ListValue) {pin=2}
+
+FunctionExpression ::= identifier '(' FunctionArgument (',' FunctionArgument)* ')' {pin=2}
+
+FunctionArgument ::= Expression | Value
+
+StandardFieldExpression ::= identifier ('.' identifier)*
+
+// allow multiple index accesses as I'm not sure how to parse nested ArrayAccessExpression
+// without infinite recursion
+IndexAccess ::= '[' ('*' | NumberLiteral | StringLiteral) ']'{pin=1}
+ArrayAccessExpression ::= (ParenExpression | FunctionExpression | StandardFieldExpression) IndexAccess IndexAccess* {pin=2}
+
+// Values
+
+SetValue ::= '{' Value* '}'
+ListValue ::= listLiteral
+
+Value ::=
+    IPLiteral
+    | StringLiteral
+    | NumberLiteral
+
+private StringLiteral ::= stringLiteral
+private IPLiteral ::= ipv4Cidr
+private NumberLiteral ::= numberLiteral
+
+

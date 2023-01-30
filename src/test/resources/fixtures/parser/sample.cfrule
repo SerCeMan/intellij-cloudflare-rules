@@ -1,0 +1,7 @@
+http.host matches "(www|api)\.example\.org"
+and not lower(http.request.uri.path) matches "/(auth|login|logut).*"
+and (
+  any(http.request.uri.args.names[*] == "token") or
+  ip.src in { 93.184.216.34 62.122.170.171 }
+)
+or cf.threat_score lt 10
