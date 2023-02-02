@@ -1,0 +1,6 @@
+ip.src == 2001:0DB8:ABCD:0012:0000:0000:0000:0000
+or ip.src == 2001:DB8:ABCD:12::
+or ip.src == 0:0:0:0:0:0:0:1
+or ip.src in { 2001:db8:abcd:0012::0/64 }
+or ip.src == ::1
+and ssl

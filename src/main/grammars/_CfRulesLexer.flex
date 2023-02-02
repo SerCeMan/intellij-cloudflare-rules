@@ -31,6 +31,7 @@ STRINGLITERAL=\"([^\"\\]|\\.)*\"
 NUMBERLITERAL=[0-9]+(\.[0-9]*)?
 IDENTIFIER=[a-zA-Z_][a-zA-Z_$0-9]*
 IPV4CIDR=([0-9]{1,3}\.){3}[0-9]{1,3}("/"([0-9]|[1-2][0-9]|3[0-2]))?
+IPV6CIDR=[a-fA-F0-9:]+("/"[0-9]+)?
 LISTLITERAL=\$[a-zA-Z_][a-zA-Z_$0-9|.]*
 
 %%
@@ -76,6 +77,7 @@ LISTLITERAL=\$[a-zA-Z_][a-zA-Z_$0-9|.]*
   {NUMBERLITERAL}      { return NUMBERLITERAL; }
   {IDENTIFIER}         { return IDENTIFIER; }
   {IPV4CIDR}           { return IPV4CIDR; }
+  {IPV6CIDR}           { return IPV6CIDR; }
   {LISTLITERAL}        { return LISTLITERAL; }
 
 }

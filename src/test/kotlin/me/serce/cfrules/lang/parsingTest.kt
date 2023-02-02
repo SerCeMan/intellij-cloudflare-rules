@@ -20,5 +20,7 @@ abstract class CfRulesParsingTestBase(baseDir: String) :
 }
 
 class CfRulesParsingTest : CfRulesParsingTestBase("fixtures/parser") {
+    fun testComments() = doTest(true)
     fun testSample() = doTest(true)
+    fun testIPv6() = doTest(true)
 }
