@@ -5,6 +5,8 @@ editing [Cloudflare Rules](https://developers.cloudflare.com/ruleset-engine/rule
 
 ![Screenshot](/screenshots/editing.png?raw=true)
 
+The plugin expects the rules to be placed in files with a `.cfrule` file extension.
+
 ## Features
 
 * Syntax highlighting
