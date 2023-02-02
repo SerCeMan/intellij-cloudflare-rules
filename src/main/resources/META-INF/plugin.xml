@@ -1,7 +1,7 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
-    <id>me.serce.cloudflare-rules</id>
+    <id>me.serce.cfrules</id>
 
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
@@ -14,7 +14,7 @@
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    An IntelliJ plugin for Cloudflare Rules language, https://developers.cloudflare.com/ruleset-engine/rules-language/
+    An IntelliJ plugin for <a href="https://developers.cloudflare.com/ruleset-engine/rules-language/">Cloudflare Rules</a> language.
   ]]></description>
 
     <!-- Product and plugin compatibility requirements.
