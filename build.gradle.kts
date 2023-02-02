@@ -1,3 +1,4 @@
+import net.researchgate.release.ReleaseExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -5,7 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.7.20"
     id("org.jetbrains.intellij") version "1.12.0"
     id("org.jetbrains.grammarkit") version "2022.3"
-
+    id("net.researchgate.release") version "3.0.2"
 }
 
 group = "me.serce"
@@ -77,5 +78,15 @@ tasks {
 
     withType<KotlinCompile> {
         dependsOn(generateLexer, generateParser)
+    }
+
+    configure<ReleaseExtension> {
+        newVersionCommitMessage.set("[Intellij-Solidity Release] - ")
+        preTagCommitMessage.set("[Intellij-Solidity Release] - pre tag commit: ")
+        buildTasks.set(listOf("buildPlugin"))
+        
+        with(git) {
+            requireBranch.set("master")
+        }
     }
 }
