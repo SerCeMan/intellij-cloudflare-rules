@@ -1,4 +1,6 @@
-# [Cloudflare Rules](https://developers.cloudflare.com/ruleset-engine/rules-language/) plugin for IntelliJ
+# Cloudflare Rules plugin for IntelliJ
+
+![build status](https://github.com/SerCeMan/intellij-cloudflare-rules/actions/workflows/gradle.yml/badge.svg)
 
 A simple IntelliJ plugin that makes
 editing [Cloudflare Rules](https://developers.cloudflare.com/ruleset-engine/rules-language/) more pleasant.
