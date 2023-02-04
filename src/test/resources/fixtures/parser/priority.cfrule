@@ -1,0 +1,15 @@
+  http.cookie1
+ and
+  http.cookie2
+or
+  http.cookie3
+ and
+  not http.cookie4
+ and
+  http.cookie5
+ and (
+   http.cookie6
+   or (
+    http.cookie7
+   )
+  )

@@ -65,32 +65,34 @@ SourceUnit ::= Expression
 
 Expression ::=
     // Comparison expressions
-    EqExpression
-    | NeExpression
-    | LtExpression
-    | LteExpression
-    | GtExpression
-    | GteExpression
-    | ContainsExpression
+    ComparisonGroup
+    | LookupGroup
+    // Logical expressions
+    | OrExpression
+    | XorExpression
+    | AndExpression
+    | NotExpression
+    // Primitive Expression
+    | ParenExpression
+    | PrimitiveGroup
+
+private ComparisonGroup ::= ComparisonExpression
+
+private LookupGroup ::=
+    ContainsExpression
     | MatchesExpression
     | InExpression
-    // Logical expressions
-    | ParenExpression
-    | NotExpression
-    | AndExpression
-    | XorExpression
-    | OrExpression
-    // Primitive expressions
-    | ArrayAccessExpression
+
+private PrimitiveGroup ::=
+    ArrayAccessExpression
     | FunctionExpression
     | StandardFieldExpression
 
-
-ParenExpression ::= '(' Expression ')' {pin=3}
-NotExpression ::= ('not' | '!') Expression {pin=1}
-AndExpression ::= Expression ('and' | '&&') Expression {pin=2}
-XorExpression ::= Expression ('xor' | '^^') Expression {pin=2}
-OrExpression ::= Expression ('or' | '||') Expression {pin=2}
+ParenExpression ::= '(' Expression ')' {pin=1}
+NotExpression ::= ('not' | '!') Expression
+AndExpression ::= Expression ('and' | '&&') Expression
+XorExpression ::= Expression ('xor' | '^^') Expression
+OrExpression ::= Expression ('or' | '||') Expression
 
 private PrimitiveExpression ::=
     ParenExpression
@@ -98,12 +100,17 @@ private PrimitiveExpression ::=
     | FunctionExpression
     | StandardFieldExpression
 
-EqExpression ::= PrimitiveExpression ('eq' | '==') Value {pin=2}
-NeExpression ::= PrimitiveExpression ('ne' | '!=') Value {pin=2}
-LtExpression ::= PrimitiveExpression ('lt' | '<') Value {pin=2}
-LteExpression ::= PrimitiveExpression ('le' | '<=') Value {pin=2}
-GtExpression ::= PrimitiveExpression ('gt' | '>') Value {pin=2}
-GteExpression ::= PrimitiveExpression ('ge' | '>=') Value {pin=2}
+ComparisonExpression ::=
+            PrimitiveExpression
+            (
+            'eq' | '=='
+            | 'ne' | '!='
+            | 'lt' | '<'
+            | 'le' | '<='
+            | 'gt' | '>'
+            | 'ge' | '>='
+            )
+            Value {pin=2}
 
 ContainsExpression ::= PrimitiveExpression 'contains' StringLiteral {pin=2}
 MatchesExpression ::= PrimitiveExpression ('matches' | '~') StringLiteral {pin=2}
@@ -117,12 +124,12 @@ StandardFieldExpression ::= identifier ('.' identifier)*
 
 // allow multiple index accesses as I'm not sure how to parse nested ArrayAccessExpression
 // without infinite recursion
+ArrayAccessExpression ::= (ParenExpression | FunctionExpression | StandardFieldExpression) IndexAccess+ {pin=2}
 IndexAccess ::= '[' ('*' | NumberLiteral | StringLiteral) ']'{pin=1}
-ArrayAccessExpression ::= (ParenExpression | FunctionExpression | StandardFieldExpression) IndexAccess IndexAccess* {pin=2}
 
 // Values
 
-SetValue ::= '{' Value* '}'
+SetValue ::= '{' Value* '}' {pin=1}
 ListValue ::= listLiteral
 
 Value ::=
